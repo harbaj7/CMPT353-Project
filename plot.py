@@ -1,5 +1,4 @@
-# python3 plot.py data/walking_5-2023-07-08_04-07-57.zip
-# python3 plot.py data/leg_swing-2023-07-13_03-31-03.zip
+# python3 plot.py 
 
 from os import listdir
 from os.path import isfile, join
