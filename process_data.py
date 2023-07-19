@@ -1,4 +1,4 @@
-# python3 plot.py 
+# python3 process_data.py
 
 from os import listdir
 from os.path import isfile, join
@@ -32,6 +32,7 @@ def smallestAngle(data_orient):
 files = [f for f in listdir('data/') if isfile(join('data', f))]
 
 for file in files:
+
     data_accl = pd.read_csv(ZipFile('data/' + file).open('Accelerometer.csv'))
     data_accl = data_accl[data_accl['seconds_elapsed'] > 7]
     
@@ -80,9 +81,9 @@ for file in files:
 
     data_grav = pd.read_csv(ZipFile('data/' + file).open('Gravity.csv'))
     data_grav = data_grav[data_grav['seconds_elapsed'] > 7]
-    data_grav = data_grav[data_grav['seconds_elapsed'] < 15]
+    data_grav = data_grav[data_grav['seconds_elapsed'] < 12]
     vectors = data_grav[['x', 'y', 'z']].to_numpy()
-    dot = np.dot(vectors, np.array([1, 0, 0]))
+    dot = np.dot(vectors, np.array([0, 1, 0]))
     length = np.linalg.norm(vectors, axis=1)
     data_grav['length'] = length
     angle = np.arccos(dot / length)
