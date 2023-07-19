@@ -44,4 +44,4 @@ for file in files:
 
     single_frame = single_frame.reset_index().sort_values(by='seconds_elapsed_rounded')
     single_frame['seconds_elapsed_rounded'] = single_frame['seconds_elapsed_rounded'] * BASE
-    single_frame.to_csv('grouped/' + file + '_grouped.csv')
+    single_frame.to_csv('grouped/' + file + '_grouped.csv', index=False)
