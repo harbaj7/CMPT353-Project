@@ -16,7 +16,7 @@ csv_names = [
 ]
 names = []
 
-BASE = 0.1
+BASE = 0.05
 
 for file in files:
     zip = ZipFile('data/' + file)
