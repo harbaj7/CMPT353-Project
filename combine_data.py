@@ -1,3 +1,5 @@
+# groups data into BASE second intervals for the fft
+
 from os import listdir
 from os.path import isfile, join
 import matplotlib.pyplot as plt
