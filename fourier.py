@@ -1,5 +1,5 @@
 # does a fft on the grouped gravity vector data
-
+import re
 from os import listdir
 from os.path import isfile, join
 import matplotlib.pyplot as plt
@@ -14,6 +14,16 @@ SAMPLE_RATE = 20
 NUM_SECS_DISPLAY = 10
 BUFFER_SECS = 5
 RENAME = {'gravity_x':'x', 'gravity_y':'y', 'gravity_z':'z', 'seconds_elapsed_rounded':'seconds_elapsed'}
+
+
+########################################################################- Harbaj code update
+data_list = []
+def dominant_frequency(frequencies, magnitudes):
+    # Find the index of the peak
+    peak_index = np.argmax(magnitudes)
+    # Return the corresponding frequency
+    return frequencies[peak_index]
+
 
 def fourier(data, col):
     N = data.shape[0]
@@ -47,6 +57,32 @@ for file in files:
     frequency_y, fft_y, minus_mean_y = fourier(data, 'y')
     frequency_z, fft_z, minus_mean_z = fourier(data, 'z')
 
+    ################################ - Harbaj code update - 
+    # Find the dominant frequencies
+    dominant_frequency_x = dominant_frequency(frequency_x, fft_x)
+    dominant_frequency_y = dominant_frequency(frequency_y, fft_y)
+    dominant_frequency_z = dominant_frequency(frequency_z, fft_z)
+    
+    match = re.search(r'jog|sprint|stand|walk', file)
+    if match:
+        activity = match.group()
+        if activity in ['jog', 'sprint']:
+            activity = 'running'
+        elif activity in ['walk', 'stand']:
+            activity = 'walking'
+    else:
+        activity = 'unknown'
+
+    data_list.append({
+        'filename': file,
+        'dominant_frequency_x': dominant_frequency_x,
+        'dominant_frequency_y': dominant_frequency_y,
+        'dominant_frequency_z': dominant_frequency_z,
+        'activity': activity
+    })
+    
+    ###############################
+    
     # plot
     fig, axs = plt.subplots(2, 2, figsize=(15, 15))
     axs[0, 0].set_title('fft')
@@ -61,6 +97,30 @@ for file in files:
     plt.savefig('fft/' + file.split('.')[0] + '_fft.png')
     # break
     
+################################################################ - Harbaj code update 
+df = pd.DataFrame(data_list)
+
+from sklearn.linear_model import LogisticRegression
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import StandardScaler
+
+
+
+# Split the data into training and testing sets
+X_train, X_test, y_train, y_test = train_test_split(df[['dominant_frequency_x', 'dominant_frequency_y', 'dominant_frequency_z']], df['activity'], test_size=0.3, random_state=30)
+
+# Scale the features
+scaler = StandardScaler()
+X_train = scaler.fit_transform(X_train)
+X_test = scaler.transform(X_test)
+
+# Train the classifier
+clf = LogisticRegression(random_state=30).fit(X_train, y_train)
+
+# Test the classifier
+print("Training accuracy: ", clf.score(X_train, y_train))
+print("Testing accuracy: ", clf.score(X_test, y_test))
+  
 
     
 
