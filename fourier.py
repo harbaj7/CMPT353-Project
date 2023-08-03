@@ -1,5 +1,6 @@
 # does a fft on the grouped gravity vector data
 import re
+import os
 from os import listdir
 from os.path import isfile, join
 import matplotlib.pyplot as plt
@@ -101,43 +102,15 @@ for file in files:
 ################################################################ - Harbaj code update Analysis
 df = pd.DataFrame(data_list)
 
-from sklearn.linear_model import LogisticRegression
-from sklearn import svm
-from sklearn.tree import DecisionTreeClassifier
-from sklearn.ensemble import RandomForestClassifier
-from sklearn.neighbors import KNeighborsClassifier
-from sklearn.naive_bayes import GaussianNB
-from sklearn.preprocessing import StandardScaler
-from sklearn.model_selection import train_test_split
+# Check if the directory exists
+if not os.path.exists('analysis'):
+    # If not, create it
+    os.makedirs('analysis')
 
-# Define the models
-models = {
-    "Logistic Regression": LogisticRegression(random_state=30),
-    "Support Vector Machine": svm.SVC(kernel='poly'),
-    "Decision Tree": DecisionTreeClassifier(splitter='best'),
-    "Random Forest": RandomForestClassifier(n_estimators=50),
-    "K-Nearest Neighbors": KNeighborsClassifier(n_neighbors=3),
-    "Gaussian Naive Bayes": GaussianNB()
-}
+# Then, you can save the DataFrame
+df.to_csv('analysis/activity_analysis.csv', index=False)
 
-# Split the data into training and testing sets
-X_train, X_test, y_train, y_test = train_test_split(df[['dominant_frequency_x', 'dominant_frequency_y', 'dominant_frequency_z']], df['activity'], test_size=0.45, random_state=30)
 
-# Scale the features
-scaler = StandardScaler()
-X_train = scaler.fit_transform(X_train)
-X_test = scaler.transform(X_test)
-
-# Train and evaluate each model
-for name, model in models.items():
-    clf = model
-    clf.fit(X_train, y_train)
-    train_score = clf.score(X_train, y_train)
-    test_score = clf.score(X_test, y_test)
-    print(f"Model: {name}")
-    print(f"Training accuracy: {train_score}")
-    print(f"Testing accuracy: {test_score}")
-    print("----------")
 
 
 
