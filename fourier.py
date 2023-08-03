@@ -40,7 +40,7 @@ def fourier(data, col):
     freq_data = scipy.fft.fft(np.array(minus_mean)) 
     # I'm pretty sure this is to deal with negative and complex values
     # also the N/2 thing is because there's some principle that prevents you from analysing frequencies greater than half your sample rate
-    y = 2/N * np.abs (freq_data [0:np.int (N/2)]) 
+    y = 2/N * np.abs (freq_data [0:int (N/2)]) 
 
     return (frequency, y, minus_mean)
 
@@ -63,12 +63,12 @@ for file in files:
     dominant_frequency_y = dominant_frequency(frequency_y, fft_y)
     dominant_frequency_z = dominant_frequency(frequency_z, fft_z)
     
-    match = re.search(r'jog|sprint|stand|walk', file)
+    match = re.search(r'jog|sprint|stand|walk|run', file)
     if match:
         activity = match.group()
-        if activity in ['jog', 'sprint']:
+        if activity in ['jog', 'sprint', 'run']:
             activity = 'running'
-        elif activity in ['walk', 'stand']:
+        elif activity in ['walk']:
             activity = 'walking'
     else:
         activity = 'unknown'
@@ -95,32 +95,51 @@ for file in files:
     axs[0, 1].plot(data['seconds_elapsed'], minus_mean_z, 'b-')
 
     plt.savefig('fft/' + file.split('.')[0] + '_fft.png')
+    plt.close()
     # break
     
-################################################################ - Harbaj code update 
+################################################################ - Harbaj code update Analysis
 df = pd.DataFrame(data_list)
 
 from sklearn.linear_model import LogisticRegression
-from sklearn.model_selection import train_test_split
+from sklearn import svm
+from sklearn.tree import DecisionTreeClassifier
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.neighbors import KNeighborsClassifier
+from sklearn.naive_bayes import GaussianNB
 from sklearn.preprocessing import StandardScaler
+from sklearn.model_selection import train_test_split
 
-
+# Define the models
+models = {
+    "Logistic Regression": LogisticRegression(random_state=30),
+    "Support Vector Machine": svm.SVC(kernel='poly'),
+    "Decision Tree": DecisionTreeClassifier(splitter='best'),
+    "Random Forest": RandomForestClassifier(n_estimators=50),
+    "K-Nearest Neighbors": KNeighborsClassifier(n_neighbors=3),
+    "Gaussian Naive Bayes": GaussianNB()
+}
 
 # Split the data into training and testing sets
-X_train, X_test, y_train, y_test = train_test_split(df[['dominant_frequency_x', 'dominant_frequency_y', 'dominant_frequency_z']], df['activity'], test_size=0.3, random_state=30)
+X_train, X_test, y_train, y_test = train_test_split(df[['dominant_frequency_x', 'dominant_frequency_y', 'dominant_frequency_z']], df['activity'], test_size=0.45, random_state=30)
 
 # Scale the features
 scaler = StandardScaler()
 X_train = scaler.fit_transform(X_train)
 X_test = scaler.transform(X_test)
 
-# Train the classifier
-clf = LogisticRegression(random_state=30).fit(X_train, y_train)
+# Train and evaluate each model
+for name, model in models.items():
+    clf = model
+    clf.fit(X_train, y_train)
+    train_score = clf.score(X_train, y_train)
+    test_score = clf.score(X_test, y_test)
+    print(f"Model: {name}")
+    print(f"Training accuracy: {train_score}")
+    print(f"Testing accuracy: {test_score}")
+    print("----------")
 
-# Test the classifier
-print("Training accuracy: ", clf.score(X_train, y_train))
-print("Testing accuracy: ", clf.score(X_test, y_test))
-  
+
 
     
 
