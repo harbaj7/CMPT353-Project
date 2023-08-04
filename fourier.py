@@ -19,6 +19,7 @@ RENAME = {'gravity_x':'x', 'gravity_y':'y', 'gravity_z':'z', 'seconds_elapsed_ro
 # Create the 'grouped' directory if it doesn't exist
 if not exists('fft'):
     makedirs('fft')
+    
 data_list = []
 def dominant_frequency(frequencies, magnitudes):
     # Find the index of the peak
@@ -50,8 +51,8 @@ print(files)
 for file in files:
     data = pd.read_csv('grouped/' + file)
     data = data[['gravity_x', 'gravity_y', 'gravity_z', 'seconds_elapsed_rounded']].rename(columns=RENAME).dropna()
-    data = data[data['seconds_elapsed'] > 10]
-    data = data[data['seconds_elapsed'] <= 14]
+    # data = data[data['seconds_elapsed'] > 10]
+    # data = data[data['seconds_elapsed'] <= 14]
 
     # calculate fft
     frequency_x, fft_x, minus_mean_x = fourier(data, 'x')
