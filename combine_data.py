@@ -49,7 +49,7 @@ for file in files:
         single_frame = single_frame.join(data, how='outer')
 
     single_frame = single_frame.reset_index().sort_values(by='seconds_elapsed_rounded')
-    single_frame['seconds_elapsed_rounded'] = single_frame['seconds_elapsed_rounded'] * BASE
+    single_frame['seconds_elapsed_rounded'] = (single_frame['seconds_elapsed_rounded'] * BASE).round(2)
 
     # Clean the filename
     base_name = file.split('-')[0]
@@ -78,7 +78,7 @@ for file in grouped_files:
         if chunk['seconds_elapsed_rounded'].max() - chunk['seconds_elapsed_rounded'].min() >= 5:
             # Reset time to start from 0
             chunk = chunk.copy()
-            chunk['seconds_elapsed_rounded'] = chunk['seconds_elapsed_rounded'] - chunk['seconds_elapsed_rounded'].min()
+            chunk['seconds_elapsed_rounded'] = (chunk['seconds_elapsed_rounded'] - chunk['seconds_elapsed_rounded'].min()).round(2)
 
             # Save the chunk with a new name
             chunk_number += 1
