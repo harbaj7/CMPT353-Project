@@ -46,7 +46,7 @@ def fourier(data, col):
     return (frequency, y, minus_mean)
 
 files = [f for f in listdir('grouped/') if isfile(join('grouped', f))]
-print(files)
+
 for file in files:
     data = pd.read_csv('grouped/' + file)
     data = data[['gravity_x', 'gravity_y', 'gravity_z', 'seconds_elapsed_rounded']].rename(columns=RENAME).dropna()
