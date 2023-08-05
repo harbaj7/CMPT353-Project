@@ -53,3 +53,6 @@ After running the scripts, the following files and directories are expected to b
 - an `analysis` directory containing the `analysis.csv`.
 - The final analysis results printed to the console, including the performance of the machine learning models.
 
+## Notes
+commits from itBeABruhmoment are from Maxwell Zhang (301448064)
+
