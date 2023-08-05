@@ -34,7 +34,7 @@ def fourier(data, col):
     mean = np.mean(data[col])
     minus_mean = data[col] - mean
 
-    # the fft, copied from some site
+    # the fft, mostly copied from the docs https://docs.scipy.org/doc/scipy/tutorial/fft.html 
     # N is the number of samples, SAMPLE_RATE is in Hertz
     # the x axis
     frequency = np.linspace (0.0, SAMPLE_RATE / 2, int (N/2)) 
