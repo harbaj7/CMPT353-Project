@@ -43,3 +43,13 @@ This script performs the final data analysis, including machine learning models 
 python3 5_analysis.py
 ```
 
+## Expected Outputs
+After running the scripts, the following files and directories are expected to be created:
+
+- An `extracted` directory containing the extracted and refined data from each zip file, organised into subdirectories for each activity.
+- A `plots` directory containing raw plots of each activity in the dataset, also organised into subdirectories for each activity.
+- A `grouped.csv` files containing the combined data from each activities in directory called `grouped`, ready for further analysis.
+- A `fft` directory containing the frequency domain data after applying the Fast Fourier Transform.
+- an `analysis` directory containing the `analysis.csv`.
+- The final analysis results printed to the console, including the performance of the machine learning models.
+
