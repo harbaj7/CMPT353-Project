@@ -26,7 +26,7 @@ python3 1_extract_and_refine.py data
 
 This script generates raw plots for each activity in the dataset, providing an initial visual analysis of the data.
 ```bash
-python3 2_raw_plotting.py: 
+python3 2_raw_plotting.py
 ```
 
 This script combines the refined data into a single CSV file for further analysis.
@@ -35,7 +35,7 @@ python3 3_combine_data.py
 ```
 This script applies the Fast Fourier Transform to the sensor data, converting it to the frequency domain for frequency-based analysis.
 ```bash
-python3 4_fourier.py:
+python3 4_fourier.py
 ```
 
 This script performs the final data analysis, including machine learning models to predict activities based on the dominant frequencies in the data.
